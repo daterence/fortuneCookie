@@ -15,11 +15,13 @@ public class Client
         System.out.println("Creating client socket..");
         Socket socket = new Socket("localhost", 12345);
 
-        BufferedReader in = new BufferedReader(
-                new InputStreamReader(socket.getInputStream()));
+        //BufferedReader - receives info from server
+        BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        //PrintWriter - OutputStream from socket
         PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
         System.out.println("Connected to localhost:12345!");
         System.out.println("Get cookies?");
+        //Scanner - to get user input
         Scanner scan = new Scanner(System.in);
         String serverMsg = "";
         String line = scan.nextLine();
