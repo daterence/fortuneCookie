@@ -1,4 +1,5 @@
 package com.terence.practice;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -10,7 +11,7 @@ import java.util.Scanner;
 public class Client
 {
     public static void main(String[] args)
-            throws IOException   {
+            throws UnknownHostException, IOException   {
         System.out.println("Creating client socket..");
         Socket socket = new Socket("localhost", 12345);
 
@@ -30,6 +31,7 @@ public class Client
             System.out.println(serverMsg);
             line = scan.nextLine();
         }
+
         socket.close();
         scan.close();
     }

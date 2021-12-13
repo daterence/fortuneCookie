@@ -1,14 +1,10 @@
 package com.terence.practice;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.io.Reader;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Server
 {
@@ -24,40 +20,21 @@ public class Server
                     "read the cookies.Will try to read from default file.");
         }
 
-        System.out.println("Server listening at port 12345...");
+        ExecutorService threadPool = Executors.newFixedThreadPool(3);
         serverSocket = new ServerSocket(12345);
-        socket = serverSocket.accept();
+        System.out.println("Server listening at port 12345...");
 
-        PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-        BufferedReader in = new BufferedReader(
-                new InputStreamReader(socket.getInputStream()));
-        String line = in.readLine();
+        try {
 
-        while (!"close".equals(line) && null != line) {
-
-            System.out.println("Client: " + line);
-
-            try {
-
-                if ("get-cookie".equals(line)) {
-                    System.out.println("Sending a cookie..");
-                    out.println("cookie-text " +
-                            new Cookie().getCookie(inputFile));
-                    out.flush();
-                    line = in.readLine();
-                } else {
-                    out.println("Server: you said " + line);
-                    out.flush();
-                    line = in.readLine();
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                break;
+            while (true) {
+                socket = serverSocket.accept();
+                int id = (int) (Math.random()*100);
+                CookieClientHandler worker = new CookieClientHandler(socket, id, inputFile);
+                threadPool.submit(worker);
             }
-        }
 
-        socket.close();
-        serverSocket.close();
+        } finally {
+            serverSocket.close();
+        }
     }
 }
