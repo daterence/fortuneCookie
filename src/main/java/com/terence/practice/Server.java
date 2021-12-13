@@ -29,8 +29,7 @@ public class Server
         socket = serverSocket.accept();
 
         PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-        BufferedReader in = new BufferedReader(
-                new InputStreamReader(socket.getInputStream()));
+        BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         String line = in.readLine();
 
         while (!"close".equals(line) && null != line) {
